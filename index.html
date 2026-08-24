@@ -53,7 +53,6 @@
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
   <script>
-    let hasPlayedIntro = false;
     let audioUnlocked = false;
 
 
@@ -82,8 +81,6 @@
       init: function () {
         const video = document.querySelector('#cardVideo');
         const videoPlane = document.querySelector('#videoPlane');
-        const introGroup = document.querySelector('#introGroup');
-        
         const btnInsta = document.querySelector('#btnInsta');
         const btnWeb = document.querySelector('#btnWeb');
         const btnCall = document.querySelector('#btnCall');
@@ -98,40 +95,14 @@
         this.el.addEventListener("targetFound", () => {
           console.log("Business card tracked.");
           
-          if (!hasPlayedIntro) {
-            hasPlayedIntro = true;
+          videoPlane.setAttribute('visible', 'true');
+          toggleSocials(true);
 
-            introGroup.setAttribute('visible', 'true');
-            videoPlane.setAttribute('visible', 'false');
-            toggleSocials(false); 
-
-            introGroup.emit('start-intro-anim');
-            
-            setTimeout(() => {
-              introGroup.setAttribute('visible', 'false');
-              videoPlane.setAttribute('visible', 'true');
-              toggleSocials(true); 
-              
-              if (video) {
-                if (audioUnlocked) {
-                  video.muted = false;
-                }
-                video.play().catch(error => console.warn("Autoplay handler caught:", error));
-              }
-            }, 3500); 
-
-          } else {
-            introGroup.setAttribute('visible', 'false');
-            videoPlane.setAttribute('visible', 'true');
-            toggleSocials(true);
-            
-    
-            if (video) {
-              if (audioUnlocked) {
-                video.muted = false;
-              }
-              video.play().catch(error => console.warn("Autoplay handler caught:", error));
+          if (video) {
+            if (audioUnlocked) {
+              video.muted = false;
             }
+            video.play().catch(error => console.warn("Autoplay handler caught:", error));
           }
         });
 
@@ -199,21 +170,6 @@
       <a-image src="#logoImg" position="0 0.92 0" width="0.8" height="0.6" transparent="true"></a-image>
 
 
-      <a-entity id="introGroup" position="0 0 0.01" scale="0.1 0.1 0.1" visible="false"
-                animation="property: scale; to: 1 1 1; dur: 800; easing: easeOutBack; startEvents: start-intro-anim">
-        <a-plane color="#0c101b" width="1.05" height="0.62" opacity="0.92"></a-plane>
-        <a-text 
-          value="LET'S EXPLORE\nTHOUGHTFLOWS HYDERABAD" 
-          color="#00e5ff" 
-          align="center" 
-          width="1.5" 
-          font="kelsonsans"
-          position="0 0 0.02"
-          animation="property: scale; to: 1.04 1.04 1.04; dir: alternate; dur: 1000; loop: true; easing: easeInOutSine">
-        </a-text>
-      </a-entity>
-
-     
       <a-video id="videoPlane" class="clickable" src="#cardVideo" position="0 0 0" width="1" height="1.6" visible="false"></a-video>
 
     
